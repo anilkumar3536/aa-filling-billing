@@ -18,7 +18,7 @@ export class BillingComponent {
   fees = {
     visa: 5000,
     slot: 20000,
-    dropbox: 1000
+    dropbox: 20000
   };
 
   constructor(private fb: FormBuilder) {
@@ -140,7 +140,7 @@ export class BillingComponent {
     // Total section
     const finalY = (doc as any).lastAutoTable.finalY + 10;
     doc.setFontSize(12);
-    doc.text(`Total Bill Amount: ₹${this.totalAmount}`, 100, finalY);
+    doc.text(`Total Bill Amount: RS.${this.totalAmount}`, 100, finalY);
 
     // Footer note
     doc.setFontSize(10);
