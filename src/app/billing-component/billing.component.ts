@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-billing',
@@ -21,10 +22,11 @@ export class BillingComponent {
     dropbox: 20000
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.billingForm = this.fb.group({
       customerName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      date:['', Validators.required],
       items: this.fb.array([])
     });
 
@@ -118,6 +120,13 @@ export class BillingComponent {
     const address =
       'Manikonda, Telangana 500089';
     doc.text(address, 45, 30);
+
+    //email and phone
+        doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    const email =
+      'Email: asifshaik.9390@gmail.com | Phone: +91 9390317009';
+    doc.text(email, 45, 37);
     
     // Draw thin gray separator line between header and invoice section
     doc.setDrawColor(180);
@@ -138,7 +147,7 @@ export class BillingComponent {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.text(`Receipt No: ${this.receiptNo}`, pageWidth - 70, 62);
-  doc.text(`Date: ${this.todayDate.toLocaleDateString()}`, pageWidth - 70, 68);
+  doc.text(`Date: ${new Date(this.billingForm.value.date).toLocaleDateString()}`, pageWidth - 70, 68);
 
   // Customer details
   doc.text(`Customer Name: ${this.billingForm.value.customerName}`, 15, 65);
@@ -190,5 +199,10 @@ export class BillingComponent {
     );
 
     doc.save(`Invoice_${this.receiptNo}.pdf`);
+    this.http.post('https://aaglobal-services-default-rtdb.firebaseio.com/bill.json', this.billingForm.value).subscribe(response => {
+      console.log('Invoice data sent to backend successfully', response);
+    }, error => {
+      console.error('Error sending invoice data to backend', error);
+    }); 
   }
   }

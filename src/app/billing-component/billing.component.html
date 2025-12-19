@@ -5,6 +5,13 @@
     <div class="form-group">
       <label>Customer Name:</label>
       <input type="text" formControlName="customerName" placeholder="Enter name" />
+      <span>
+        <label>Date:</label>
+        <input type="date" formControlName="date" />
+        <div *ngIf="submitted && billingForm.get('date')?.invalid" class="error">
+        date is required
+      </div>
+      </span>
     </div>
     <div>
       <label>Mobile Number:</label>
