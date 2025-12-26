@@ -53,231 +53,327 @@
   svg.material-icons:not(:last-child) {
     margin-right: 8px;
   }
-
 </style>
 
 
 <div>
-<div class="form-container">
-<form [formGroup]="mainForm" (ngSubmit)="submitForm()">
+  <div class="form-container">
+    <form [formGroup]="mainForm" (ngSubmit)="submitForm()">
 
-  <!-- PAN -->
-  <div class="section">
-    <label>PAN Card Number *</label>
-    <input type="text" formControlName="pan" />
-    <div class="error" *ngIf="showError(mainForm.get('pan'))">
-      PAN is required
-    </div>
-  </div>
-
-  <!-- EDUCATION SECTION -->
-  <div class="section">
-    <h3>Do you have Educational Details?</h3>
-    <label>
-      <input type="radio" value="yes" formControlName="hasEducation" /> Yes
-    </label>
-    <label>
-      <input type="radio" value="no" formControlName="hasEducation" /> No
-    </label>
-
-    <div class="error" *ngIf="showError(mainForm.get('hasEducation'))">
-      Please choose yes or no
-    </div>
-
-    <!-- IF NO -->
-    <div *ngIf="mainForm.get('hasEducation')?.value === 'no'">
-      <label>Explain *</label>
-      <textarea formControlName="educationDescription"></textarea>
-      <div class="error" *ngIf="showError(mainForm.get('educationDescription'))">
-        Description is required
+      <!-- PAN -->
+      <div class="section">
+        <label>PAN Card Number *</label>
+        <input type="text" formControlName="pan" />
+        <div class="error" *ngIf=" mainForm.controls['pan']?.errors && mainForm.controls['pan']?.touched ">
+          <span *ngIf="mainForm.controls['pan']?.errors?.['required']">PAN is required</span>
+          <span *ngIf="mainForm.controls['pan']?.errors?.['pattern']">Enter Valid PAN Number</span>
+        </div>
       </div>
-    </div>
 
-    <!-- IF YES -->
-    <div formGroupName="educationDetails" *ngIf="mainForm.get('hasEducation')?.value === 'yes'">
-      <h3>Educational Details</h3>
+      <!-- EDUCATION SECTION -->
+      <div class="section">
+        <h3>Do you have Educational Details?</h3>
+        <label>
+          <input type="radio" value="yes" formControlName="hasEducation" (change)="changeEducation($event)" /> Yes
+        </label>
+        <label>
+          <input type="radio" value="no" formControlName="hasEducation" (change)="changeEducation($event)" /> No
+        </label>
 
-      <label>Institute Name *</label>
-      <input type="text" formControlName="instituteName" />
-      <div class="error" *ngIf="showErrorED('instituteName')">Required</div>
+        <div class="error" *ngIf="showError(mainForm.get('hasEducation'))">
+          Please choose yes or no
+        </div>
 
-      <label>Street Line 1 *</label>
-      <input type="text" formControlName="street1" />
-      <div class="error" *ngIf="showErrorED('street1')">Required</div>
+        <!-- IF NO -->
+        <div *ngIf="mainForm.get('hasEducation')?.value === 'no'">
+          <label>Explain *</label>
+          <textarea formControlName="educationDescription"></textarea>
+          <div class="error"
+            *ngIf=" mainForm.controls['educationDescription']?.errors && mainForm.controls['educationDescription']?.touched ">
+            <span *ngIf="mainForm.controls['educationDescription']?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.controls['educationDescription']?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
+        </div>
 
-      <label>Street Line 2</label>
-      <input type="text" formControlName="street2" />
+        <!-- IF YES -->
+        <div formGroupName="educationDetails" *ngIf="mainForm.get('hasEducation')?.value === 'yes'">
+          <h3>Educational Details</h3>
+          <div>
+            <label>Institute Name *</label>
+          <input type="text" formControlName="instituteName" />
+          <div class="error" *ngIf="showErrorED('instituteName')">
+            <span *ngIf="mainForm.get('educationDetails.instituteName')?.errors?.['required']">This field is
+              required</span>
+            <span *ngIf="mainForm.get('educationDetails.instituteName')?.errors?.['pattern']">Allows only
+              Alphabets</span>
+          </div>
+          </div>
 
-      <label>City *</label>
-      <input type="text" formControlName="city" />
-      <div class="error" *ngIf="showErrorED('city')">Required</div>
 
-      <label>State *</label>
-      <input type="text" formControlName="state" />
-      <div class="error" *ngIf="showErrorED('state')">Required</div>
+          <label>Street Line 1 *</label>
+          <input type="text" formControlName="street1" />
+          <div class="error" *ngIf="showErrorED('street1')">
+            <span *ngIf="mainForm.get('educationDetails.street1')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('educationDetails.street1')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Pincode *</label>
-      <input type="text" formControlName="pincode" />
-      <div class="error" *ngIf="showErrorED('pincode')">Enter valid 6-digit pincode</div>
+         <label>Street Line 2 *</label>
+          <input type="text" formControlName="street2" />
+          <div class="error" *ngIf="showErrorED('street2')">
+            <span *ngIf="mainForm.get('educationDetails.street2')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('educationDetails.street2')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Course Name *</label>
-      <input type="text" formControlName="courseName" />
-      <div class="error" *ngIf="showErrorED('courseName')">Required</div>
+          <label>City *</label>
+          <input type="text" formControlName="city" />
+          <div class="error" *ngIf="showErrorED('city')">
+            <span *ngIf="mainForm.get('educationDetails.city')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('educationDetails.city')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Start Date *</label>
-      <input type="date" formControlName="startDate" />
-      <div class="error" *ngIf="showErrorED('startDate')">Required</div>
+          <label>State *</label>
+          <input type="text" formControlName="state" />
+          <div class="error" *ngIf="showErrorED('state')">
+            <span *ngIf="mainForm.get('educationDetails.state')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('educationDetails.state')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>End Date *</label>
-      <input type="date" formControlName="endDate" />
-      <div class="error" *ngIf="showErrorED('endDate')">Required</div>
-    </div>
-  </div>
+          <label>Pincode *</label>
+          <input type="text" formControlName="pincode" />
+          <div class="error" *ngIf="showErrorED('pincode')">
+            <span *ngIf="mainForm.get('educationDetails.pincode')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('educationDetails.pincode')?.errors?.['pattern']">Enter a valid pincode</span>
+          </div>
 
-  <!-- EMPLOYMENT SECTION -->
-  <div class="section">
-    <h3>Do you have Employment Details?</h3>
-    <label>
-      <input type="radio" value="yes" formControlName="hasEmployment" /> Yes
-    </label>
-    <label>
-      <input type="radio" value="no" formControlName="hasEmployment" /> No
-    </label>
+          <label>Course Name *</label>
+          <input type="text" formControlName="courseName" />
+          <div class="error"
+            *ngIf="showErrorED('courseName')">
+            <span *ngIf="mainForm.get('educationDetails.courseName')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('educationDetails.courseName')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-    <div class="error" *ngIf="showError(mainForm.get('hasEmployment'))">
-      Please choose yes or no
-    </div>
+          <label>Start Date *</label>
+          <input type="date" formControlName="startDate" />
+          <div class="error" *ngIf="showErrorED('startDate')">Required</div>
 
-    <!-- NO -->
-    <div *ngIf="mainForm.get('hasEmployment')?.value === 'no'">
-      <label>Explain *</label>
-      <textarea formControlName="employmentDescription"></textarea>
-      <div class="error" *ngIf="showError(mainForm.get('employmentDescription'))">
-        Description is required
+          <label>End Date *</label>
+          <input type="date" formControlName="endDate" />
+          <div class="error" *ngIf="showErrorED('endDate')">Required</div>
+        </div>
       </div>
-    </div>
 
-    <!-- YES -->
-    <div formGroupName="employmentDetails" *ngIf="mainForm.get('hasEmployment')?.value === 'yes'">
-      <h3>Employment Details</h3>
+      <!-- EMPLOYMENT SECTION -->
+      <div class="section">
+        <h3>Do you have Employment Details?</h3>
+        <label>
+          <input type="radio" value="yes" formControlName="hasEmployment" (change)="onChangeEmployment($event)" /> Yes
+        </label>
+        <label>
+          <input type="radio" value="no" formControlName="hasEmployment" (change)="onChangeEmployment($event)" /> No
+        </label>
 
-      <label>Company Name *</label>
-      <input type="text" formControlName="companyName" />
-      <div class="error" *ngIf="showErrorEmp('companyName')">Required</div>
+        <div class="error" *ngIf="showError(mainForm.get('hasEmployment'))">
+          Please choose yes or no
+        </div>
 
-      <label>Street Line 1 *</label>
-      <input type="text" formControlName="street1" />
-      <div class="error" *ngIf="showErrorEmp('street1')">Required</div>
+        <!-- NO -->
+        <div *ngIf="mainForm.get('hasEmployment')?.value === 'no'">
+          <label>Explain *</label>
+          <textarea formControlName="employmentDescription"></textarea>
+          <div class="error"
+            *ngIf=" mainForm.controls['employmentDescription']?.errors && mainForm.controls['employmentDescription']?.touched ">
+            <span *ngIf="mainForm.controls['employmentDescription']?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.controls['employmentDescription']?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
+        </div>
 
-      <label>Street Line 2</label>
-      <input type="text" formControlName="street2" />
+        <!-- YES -->
+        <div formGroupName="employmentDetails" *ngIf="mainForm.get('hasEmployment')?.value === 'yes'">
+          <h3>Employment Details</h3>
 
-      <label>City *</label>
-      <input type="text" formControlName="city" />
-      <div class="error" *ngIf="showErrorEmp('city')">Required</div>
+          <label>Company Name *</label>
+          <input type="text" formControlName="companyName" />
+          <div class="error"
+            *ngIf=" showErrorEmp('companyName') ">
+            <span *ngIf="mainForm.get('employmentDetails.companyName')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.companyName')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>State *</label>
-      <input type="text" formControlName="state" />
-      <div class="error" *ngIf="showErrorEmp('state')">Required</div>
+          <label>Street Line 1 *</label>
+          <input type="text" formControlName="street1" />
+          <div class="error" *ngIf="showErrorEmp('street1') ">
+            <span *ngIf="mainForm.get('employmentDetails.street1')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.street1')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Pincode *</label>
-      <input type="text" formControlName="pincode" />
-      <div class="error" *ngIf="showErrorEmp('pincode')">Enter valid 6-digit pincode</div>
+          <label>Street Line 2 *</label>
+          <input type="text" formControlName="street2" />
+          <div class="error" *ngIf="showErrorEmp('street2') ">
+            <span *ngIf="mainForm.get('employmentDetails.street2')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.street2')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Salary *</label>
-      <input type="text" formControlName="salary" />
-      <div class="error" *ngIf="showErrorEmp('salary')">Enter numbers only</div>
+          <label>City *</label>
+          <input type="text" formControlName="city" />
+          <div class="error" *ngIf="showErrorEmp('city') ">
+            <span *ngIf="mainForm.get('employmentDetails.city')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.city')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Job Title *</label>
-      <input type="text" formControlName="jobTitle" />
-      <div class="error" *ngIf="showErrorEmp('jobTitle')">Required</div>
+          <label>State *</label>
+          <input type="text" formControlName="state" />
+          <div class="error" *ngIf="showErrorEmp('state') ">
+            <span *ngIf="mainForm.get('employmentDetails.state')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.state')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Job Description *</label>
-      <textarea formControlName="jobDescription"></textarea>
-      <div class="error" *ngIf="showErrorEmp('jobDescription')">Required</div>
+          <label>Pincode *</label>
+          <input type="text" formControlName="pincode" />
+          <div class="error" *ngIf=" showErrorEmp('pincode') ">
+            <span *ngIf="mainForm.get('employmentDetails.pincode')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.pincode')?.errors?.['pattern']">Enter a valid pincode</span>
+          </div>
 
-      <label>Work Phone *</label>
-      <input type="text" formControlName="phone" />
-      <div class="error" *ngIf="showErrorEmp('phone')">Enter valid 10-digit phone</div>
-    </div>
-  </div>
+          <label>Salary *</label>
+          <input type="text" formControlName="salary" />
+          <div class="error" *ngIf="showErrorEmp('salary') ">
+            <span *ngIf="mainForm.get('employmentDetails.salary')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.salary')?.errors?.['pattern']">Enter a valid salary</span>
+          </div>
 
-  <!-- PREVIOUS EMPLOYMENT SECTION -->
-  <div class="section">
-    <h3>Do you have Previous Employment?</h3>
-    <label>
-      <input type="radio" value="yes" formControlName="hasPrevEmployment" /> Yes
-    </label>
-    <label>
-      <input type="radio" value="no" formControlName="hasPrevEmployment" /> No
-    </label>
+          <label>Job Title *</label>
+          <input type="text" formControlName="jobTitle" />
+          <div class="error" *ngIf=" showErrorEmp('jobTitle') ">
+            <span *ngIf="mainForm.get('employmentDetails.jobTitle')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.jobTitle')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-    <div class="error" *ngIf="showError(mainForm.get('hasPrevEmployment'))">
-      Please choose yes or no
-    </div>
+          <label>Job Description *</label>
+          <textarea formControlName="jobDescription"></textarea>
+          <div class="error"
+            *ngIf=" showErrorEmp('jobDescription') ">
+            <span *ngIf="mainForm.get('employmentDetails.jobDescription')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.jobDescription')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-    <!-- NO -->
-    <div *ngIf="mainForm.get('hasPrevEmployment')?.value === 'no'">
-      <label>Explain *</label>
-      <textarea formControlName="prevEmploymentDescription"></textarea>
-      <div class="error" *ngIf="showError(mainForm.get('prevEmploymentDescription'))">
-        Description is required
+          <label>Work Phone *</label>
+          <input type="text" formControlName="phone" />
+          <div class="error" *ngIf=" showErrorEmp('phone') ">
+            <span *ngIf="mainForm.get('employmentDetails.phone')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('employmentDetails.phone')?.errors?.['pattern']">Enter a valid phone number</span>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- YES -->
-    <div formGroupName="previousEmploymentDetails" *ngIf="mainForm.get('hasPrevEmployment')?.value === 'yes'">
-      <h3>Previous Employment Details</h3>
+      <!-- PREVIOUS EMPLOYMENT SECTION -->
+      <div class="section">
+        <h3>Do you have Previous Employment?</h3>
+        <label>
+          <input type="radio" value="yes" formControlName="hasPrevEmployment" (change)="onprevEmployment($event)" /> Yes
+        </label>
+        <label>
+          <input type="radio" value="no" formControlName="hasPrevEmployment" (change)="onprevEmployment($event)" /> No
+        </label>
 
-      <label>Company Name *</label>
-      <input type="text" formControlName="companyName" />
-      <div class="error" *ngIf="showErrorPrev('companyName')">Required</div>
+        <div class="error" *ngIf="showError(mainForm.get('hasPrevEmployment'))">
+          Please choose yes or no
+        </div>
 
-      <label>Street Line 1 *</label>
-      <input type="text" formControlName="street1" />
-      <div class="error" *ngIf="showErrorPrev('street1')">Required</div>
+        <!-- NO -->
+        <div *ngIf="mainForm.get('hasPrevEmployment')?.value === 'no'">
+          <label>Explain *</label>
+          <textarea formControlName="prevEmploymentDescription"></textarea>
+          <div class="error"
+            *ngIf=" mainForm.controls['prevEmploymentDescription']?.errors && mainForm.controls['prevEmploymentDescription']?.touched ">
+            <span *ngIf="mainForm.controls['prevEmploymentDescription']?.errors?.['required']">This field is
+              required</span>
+            <span *ngIf="mainForm.controls['prevEmploymentDescription']?.errors?.['pattern']">Allows only
+              Alphabets</span>
+          </div>
+        </div>
 
-      <label>Street Line 2</label>
-      <input type="text" formControlName="street2" />
+        <!-- YES -->
+        <div formGroupName="previousEmploymentDetails" *ngIf="mainForm.get('hasPrevEmployment')?.value === 'yes'">
+          <h3>Previous Employment Details</h3>
 
-      <label>City *</label>
-      <input type="text" formControlName="city" />
-      <div class="error" *ngIf="showErrorPrev('city')">Required</div>
+          <label>Company Name *</label>
+          <input type="text" formControlName="companyName" />
+          <div class="error"
+            *ngIf="showErrorPrevEmp('companyName') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.companyName')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.companyName')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>State *</label>
-      <input type="text" formControlName="state" />
-      <div class="error" *ngIf="showErrorPrev('state')">Required</div>
+          <label>Street Line 1 *</label>
+          <input type="text" formControlName="street1" />
+          <div class="error" *ngIf=" showErrorPrevEmp('street1') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.street1')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.street1')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Pincode *</label>
-      <input type="text" formControlName="pincode" />
-      <div class="error" *ngIf="showErrorPrev('pincode')">Enter valid 6-digit pincode</div>
+          <label>Street Line 2</label>
+          <input type="text" formControlName="street2" />
 
-      <label>Job Title *</label>
-      <input type="text" formControlName="jobTitle" />
-      <div class="error" *ngIf="showErrorPrev('jobTitle')">Required</div>
+          <label>City *</label>
+          <input type="text" formControlName="city" />
+          <div class="error" *ngIf=" showErrorPrevEmp('city') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.city')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.city')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Job Description *</label>
-      <textarea formControlName="jobDescription"></textarea>
-      <div class="error" *ngIf="showErrorPrev('jobDescription')">Required</div>
+          <label>State *</label>
+          <input type="text" formControlName="state" />
+          <div class="error" *ngIf=" showErrorPrevEmp('state') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.state')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.state')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-      <label>Company Contact *</label>
-      <input type="text" formControlName="companyContact" />
-      <div class="error" *ngIf="showErrorPrev('companyContact')">Enter valid 10-digit phone</div>
+          <label>Pincode *</label>
+          <input type="text" formControlName="pincode" />
+          <div class="error" *ngIf=" showErrorPrevEmp('pincode') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.pincode')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.pincode')?.errors?.['pattern']">Enter a valid Pincode</span>
+          </div>
 
-      <label>Supervisor Name</label>
-      <input type="text" formControlName="supervisor" />
-    </div>
-  </div>
+          <label>Job Title *</label>
+          <input type="text" formControlName="jobTitle" />
+          <div class="error" *ngIf=" showErrorPrevEmp('jobTitle') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.jobTitle')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.jobTitle')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-  <button type="submit">SUBMIT</button>
-</form>
+          <label>Job Description *</label>
+          <textarea formControlName="jobDescription"></textarea>
+          <div class="error"
+            *ngIf=" showErrorPrevEmp('jobDescription') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.jobDescription')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.jobDescription')?.errors?.['pattern']">Allows only Alphabets</span>
+          </div>
 
-<!-- SUMMARY TABLE -->
-<!-- <div *ngIf="submitted" class="summary-section">
+          <label>Company Contact *</label>
+          <input type="text" formControlName="companyContact" />
+          <div class="error"
+            *ngIf=" showErrorPrevEmp('companyContact') ">
+            <span *ngIf="mainForm.get('previousEmploymentDetails.companyContact')?.errors?.['required']">This field is required</span>
+            <span *ngIf="mainForm.get('previousEmploymentDetails.companyContact')?.errors?.['pattern']">Enter a valid Company Contact</span>
+          </div>
+
+          <label>Supervisor Name</label>
+          <input type="text" formControlName="supervisor" />
+        </div>
+      </div>
+
+      <button type="submit">SUBMIT</button>
+      
+    </form>
+
+    <!-- SUMMARY TABLE -->
+    <!-- <div *ngIf="submitted" class="summary-section">
   <h2>Application Summary</h2> -->
 
-  <!-- PAN -->
-  <!-- <table class="summary-table">
+    <!-- PAN -->
+    <!-- <table class="summary-table">
     <tr><th colspan="2">Applicant Information</th></tr>
     <tr>
       <td>PAN Number</td>
@@ -285,8 +381,8 @@
     </tr>
   </table>
  -->
-  <!-- EDUCATION -->
-  <!-- <table class="summary-table" *ngIf="mainForm.value.hasEducation === 'yes'">
+    <!-- EDUCATION -->
+    <!-- <table class="summary-table" *ngIf="mainForm.value.hasEducation === 'yes'">
     <tr><th colspan="2">Educational Details</th></tr>
     <tr><td>Institute Name</td><td>{{ mainForm.value.educationDetails.instituteName }}</td></tr>
     <tr><td>Street Line 1</td><td>{{ mainForm.value.educationDetails.street1 }}</td></tr>
@@ -299,8 +395,8 @@
     <tr><td>End Date</td><td>{{ mainForm.value.educationDetails.endDate }}</td></tr>
   </table> -->
 
-  <!-- When EDUCATION = NO -->
-  <!-- <table class="summary-table" *ngIf="mainForm.value.hasEducation === 'no'">
+    <!-- When EDUCATION = NO -->
+    <!-- <table class="summary-table" *ngIf="mainForm.value.hasEducation === 'no'">
     <tr><th colspan="2">Educational Details</th></tr>
     <tr>
       <td>Description</td>
@@ -308,8 +404,8 @@
     </tr>
   </table> -->
 
-  <!-- EMPLOYMENT -->
-  <!-- <table class="summary-table" *ngIf="mainForm.value.hasEmployment === 'yes'">
+    <!-- EMPLOYMENT -->
+    <!-- <table class="summary-table" *ngIf="mainForm.value.hasEmployment === 'yes'">
     <tr><th colspan="2">Employment Details</th></tr>
     <tr><td>Company Name</td><td>{{ mainForm.value.employer.companyName }}</td></tr>
     <tr><td>Street Line 1</td><td>{{ mainForm.value.employer.companyAddress.street1 }}</td></tr>
@@ -323,8 +419,8 @@
     <tr><td>Work Phone</td><td>{{ mainForm.value.employer.workPhone }}</td></tr>
   </table> -->
 
-  <!-- When EMPLOYMENT = NO -->
-  <!-- <table class="summary-table" *ngIf="mainForm.value.hasEmployment === 'no'">
+    <!-- When EMPLOYMENT = NO -->
+    <!-- <table class="summary-table" *ngIf="mainForm.value.hasEmployment === 'no'">
     <tr><th colspan="2">Employment Details</th></tr>
     <tr>
       <td>Description</td>
@@ -332,8 +428,8 @@
     </tr>
   </table> -->
 
-  <!-- PREVIOUS EMPLOYMENT -->
-  <!-- <table class="summary-table" *ngIf="mainForm.value.hasPrevEmployment === 'yes'">
+    <!-- PREVIOUS EMPLOYMENT -->
+    <!-- <table class="summary-table" *ngIf="mainForm.value.hasPrevEmployment === 'yes'">
     <tr><th colspan="2">Previous Employment Details</th></tr>
     <tr><td>Company Name</td><td>{{ mainForm.value.previousEmployer.companyName }}</td></tr>
     <tr><td>Street Line 1</td><td>{{ mainForm.value.previousEmployer.companyAddress.street1 }}</td></tr>
@@ -347,18 +443,18 @@
     <tr><td>Supervisor Name</td><td>{{ mainForm.value.previousEmployer.supervisorName }}</td></tr>
   </table> -->
 
-  <!-- When PREVIOUS EMPLOYMENT = NO -->
-  <!-- <table class="summary-table" *ngIf="mainForm.value.hasPrevEmployment === 'no'">
+    <!-- When PREVIOUS EMPLOYMENT = NO -->
+    <!-- <table class="summary-table" *ngIf="mainForm.value.hasPrevEmployment === 'no'">
     <tr><th colspan="2">Previous Employment Details</th></tr>
     <tr>
       <td>Description</td>
       <td>{{ mainForm.value.prevEmploymentDescription }}</td>
     </tr>
   </table> -->
-<!-- </div> -->
+    <!-- </div> -->
 
 
-</div>
+  </div>
 
 
 
@@ -372,5 +468,3 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
