@@ -11,76 +11,165 @@ export class AppComponent {
 
   mainForm!: FormGroup;
   submitted = false;
-
+  userPanPatternRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.createForm();
   }
+  changeEducation(event: any) {
+    if (event.target.value === 'yes') {
+      this.mainForm.get('educationDetails.instituteName')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.street1')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.street2')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.city')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.state')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.pincode')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.courseName')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.startDate')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.endDate')?.setValidators([Validators.required])
+      this.mainForm.get('educationDetails.educationDescription')?.setValidators([]);
+    } 
+    if (event.target.value === 'no') {
+      this.mainForm.get('educationDetails.instituteName')?.setValidators([]);
+      this.mainForm.get('educationDetails.street1')?.setValidators([])
+      this.mainForm.get('educationDetails.street2')?.setValidators([])
+      this.mainForm.get('educationDetails.city')?.setValidators([])
+      this.mainForm.get('educationDetails.state')?.setValidators([])
+      this.mainForm.get('educationDetails.pincode')?.setValidators([])
+      this.mainForm.get('educationDetails.courseName')?.setValidators([])
+      this.mainForm.get('educationDetails.startDate')?.setValidators([])
+      this.mainForm.get('educationDetails.endDate')?.setValidators([])
+      this.mainForm.get('educationDetails')?.reset()
+    
+    }
 
+}
+onChangeEmployment(event:any){
+  if (event.target.value === 'yes') {
+    this.mainForm.get('employmentDetails.companyName')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.street1')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.street2')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.city')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.state')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.pincode')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.salary')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.jobTitle')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.jobDescription')?.setValidators([Validators.required])
+    this.mainForm.get('employmentDetails.phone')?.setValidators([Validators.required])
+    this.mainForm.get('educationDescription')?.updateValueAndValidity();
+    this.mainForm.get('educationDescription')?.reset();
+  } 
+  if (event.target.value === 'no') {
+    this.mainForm.get('employmentDetails.companyName')?.setValidators([]);
+    this.mainForm.get('employmentDetails.street1')?.setValidators([])
+    this.mainForm.get('employmentDetails.street2')?.setValidators([])
+    this.mainForm.get('employmentDetails.city')?.setValidators([])
+    this.mainForm.get('employmentDetails.state')?.setValidators([])
+    this.mainForm.get('employmentDetails.pincode')?.setValidators([])
+    this.mainForm.get('employmentDetails.salary')?.setValidators([])
+    this.mainForm.get('employmentDetails.jobTitle')?.setValidators([])
+    this.mainForm.get('employmentDetails.jobDescription')?.setValidators([])
+    this.mainForm.get('employmentDetails.phone')?.setValidators([])
+    this.mainForm.get('employmentDetails')?.reset() 
+    this.mainForm.get('educationDescription')?.setValidators([Validators.required]);
+    this.mainForm.get('employmentDescription')?.reset();
+    this.mainForm.get('educationDescription')?.setValidators([Validators.required]);
+  }
+}
+onprevEmployment(event:any){
+  if (event.target.value === 'yes') { 
+    this.mainForm.get('previousEmploymentDetails.companyName')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.street1')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.street2')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.city')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.state')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.pincode')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.jobTitle')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.jobDescription')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.companyContact')?.setValidators([Validators.required])
+    this.mainForm.get('previousEmploymentDetails.supervisor')?.setValidators([Validators.required]) 
+    this.mainForm.get('educationDescription')?.setValidators([Validators.required]);
+    this.mainForm.get('prevEmploymentDescription')?.reset();
+  }
+  if (event.target.value === 'no') {
+    this.mainForm.get('previousEmploymentDetails.companyName')?.setValidators([]);
+    this.mainForm.get('previousEmploymentDetails.street1')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.street2')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.city')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.state')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.pincode')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.jobTitle')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.jobDescription')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.companyContact')?.setValidators([])
+    this.mainForm.get('previousEmploymentDetails.supervisor')?.setValidators([]) 
+    this.mainForm.get('previousEmploymentDetails')?.reset() 
+     this.mainForm.get('prevEmploymentDescription')?.setValidators([Validators.required]);
+  }
+}
   createForm() {
     this.mainForm = this.fb.group({
 
-      pan: ['', Validators.required],
+      pan: ['',[Validators.required, Validators.pattern(this.userPanPatternRegex)]], 
 
       /* EDUCATION */
-      hasEducation: ['', Validators.required],
-      educationDescription: [''],
+     hasEducation: ['', Validators.required],
+      educationDescription: ['', [Validators.pattern(/^[A-Za-z]+(?: [A-Za-z]+)*$/)]],
       educationDetails: this.fb.group({
         instituteName: [''],
-        street1: [''],
-        street2: [''],
-        city: [''],
-        state: [''],
-        pincode: ['', Validators.pattern(/^[0-9]{6}$/)],
-        courseName: [''],
-        startDate: [''],
-        endDate: ['']
+        street1: ['', ],
+        street2: ['',],
+        city: ['', ],
+        state: ['', ],
+        pincode: ['', ],
+        courseName: ['', ],
+        startDate: ['', ],
+        endDate: ['', ]  
       }),
 
       /* EMPLOYMENT */
-      hasEmployment: ['', Validators.required],
-      employmentDescription: [''],
+     hasEmployment: ['', Validators.required],
+      employmentDescription: ['', [Validators.required,Validators.pattern('^[A-Za-z]+(?: [A-Za-z]+)*$')]],
       employmentDetails: this.fb.group({
-        companyName: [''],
-        street1: [''],
+        companyName: ['', ],
+        street1: ['', ],
         street2: [''],
-        city: [''],
-        state: [''],
-        pincode: ['', Validators.pattern(/^[0-9]{6}$/)],
-        salary: ['', Validators.pattern(/^[0-9]+$/)],
-        jobTitle: [''],
-        jobDescription: [''],
-        phone: ['', Validators.pattern(/^[0-9]{10}$/)]
-      }),
+        city: ['',],
+        state: ['', ],
+        pincode: ['', ],
+        salary: ['', ],
+        jobTitle: ['', ],
+        jobDescription: ['',],
+        phone: ['', ]
+      }), 
 
       /* PREVIOUS EMPLOYMENT */
-      hasPrevEmployment: ['', Validators.required],
-      prevEmploymentDescription: [''],
+     hasPrevEmployment: ['', Validators.required],
+      prevEmploymentDescription: ['', Validators.required],
       previousEmploymentDetails: this.fb.group({
-        companyName: [''],
-        street1: [''],
+        companyName: ['',],
+        street1: ['', ],
         street2: [''],
-        city: [''],
-        state: [''],
-        pincode: ['', Validators.pattern(/^[0-9]{6}$/)],
-        jobTitle: [''],
-        jobDescription: [''],
-        companyContact: ['', Validators.pattern(/^[0-9]{10}$/)],
-        supervisor: ['']
+        city: ['', ],
+        state: ['', ],
+        pincode: ['',],
+        jobTitle: ['', ],
+        jobDescription: ['', ],
+        companyContact: ['', ],
+        supervisor: ['', ]
       })
     });
-  }
+  } 
 
   /* Error check for top-level fields */
   showError(ctrl: any) {
     return ctrl.invalid && (ctrl.dirty || ctrl.touched);
-  }
+  } 
 
   /* EDUCATION */
   showErrorED(control: string) {
     const visible = this.mainForm.get('hasEducation')?.value === 'yes';
     const ctrl = this.mainForm.get('educationDetails.' + control);
     return visible && ctrl?.invalid && (ctrl.touched || ctrl.dirty);
-  }
+  } 
 
   /* EMPLOYMENT */
   showErrorEmp(control: string) {
@@ -88,13 +177,13 @@ export class AppComponent {
     const ctrl = this.mainForm.get('employmentDetails.' + control);
     return visible && ctrl?.invalid && (ctrl.touched || ctrl.dirty);
   }
-
+ 
   /* PREVIOUS EMPLOYMENT */
-  showErrorPrev(control: string) {
+  showErrorPrevEmp(control: string) {
     const visible = this.mainForm.get('hasPrevEmployment')?.value === 'yes';
     const ctrl = this.mainForm.get('previousEmploymentDetails.' + control);
     return visible && ctrl?.invalid && (ctrl.touched || ctrl.dirty);
-  }
+  } 
 
   submitForm() {
     this.submitted = false;
@@ -116,9 +205,9 @@ export class AppComponent {
         alert('There was an error submitting the form. Please try again later.');
       }
     );
-    console.log(this.mainForm.value);
+    console.log(this.mainForm.value); 
     // alert('Form submitted successfully!');
-  }
+   } 
 
   /* SUMMARY TEXT */
   get educationSummary() {
@@ -131,5 +220,6 @@ export class AppComponent {
 
   get prevEmploymentSummary() {
     return JSON.stringify(this.mainForm.value.previousEmploymentDetails);
-  }
+  } 
+  
 }
